@@ -12,8 +12,6 @@ struct nodo{
 
 typedef vector<nodo> graph;
 
-vector<int> stack;
-
 int id=0;
 
 graph trasposto(graph& grafo){
@@ -82,14 +80,14 @@ int Batman(graph& grafo, int S, int& D){
     return comb_enemy;
 }
 
-void tarjan(graph& grafo, int nodo){
+void tarjan(graph& grafo, int nodo, vector<int> stack){
     stack.push_back(nodo);
     grafo[nodo].onStack = true;
     grafo[nodo].lowlink = grafo[nodo].id_nodo = id++;
 
     for(int k : grafo[nodo].adj){
         if(grafo[k].id_nodo==-1){
-            tarjan(grafo, k);
+            tarjan(grafo, k, stack);
             grafo[nodo].lowlink = min(grafo[k].lowlink, grafo[nodo].lowlink);
         }
         else if(grafo[k].onStack){
@@ -113,6 +111,7 @@ int main(){
 
     graph grafo;
     graph grafo_trasposto;
+    vector<int> stack;
 
     int N, M, S, D, start, end;
     in >> N >> M >> S >> D;
@@ -135,7 +134,7 @@ int main(){
         cout << top_Sort[i] <<" ";
     }
 
-    tarjan(grafo, S);
+    tarjan(grafo, S, stack);
 
     int comb_enemy=Batman(grafo, S, D);
 
